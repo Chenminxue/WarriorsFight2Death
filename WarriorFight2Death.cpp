@@ -27,7 +27,7 @@ class Battle {
 public:
 	static void Fight(Warrior& role1, Warrior& role2);
 
-	static void CheckResult(Warrior& role1, Warrior& role2);
+	static string CheckResult(Warrior& role1, Warrior& role2);
 
 
 };
@@ -36,7 +36,10 @@ public:
 
 int main() {
 
-	Warrior Thor("Thor", 100, 30, 15);
+	Warrior Thor("Thor", 100, 35, 15);
+	Warrior Hulk("Hulk", 125, 25, 10);
+
+	Battle::Fight(Thor, Hulk);
 
 
 	return 0;
@@ -59,10 +62,28 @@ int Warrior::Block() {
 
 void Battle::Fight(Warrior& role1, Warrior& role2) {
 	while (true) {
-		if()
+		if (Battle::CheckResult(role1, role2) == "Game over!" || Battle::CheckResult(role2, role1) == "Game over!") {
+			cout << "Game over! \n";
+				break;
+		}
 	}
 }
 
-void Battle::CheckResult(Warrior& role1, Warrior& role2) {
+string Battle::CheckResult(Warrior& role1, Warrior& role2) {
+	int attackAmt = role1.Attack();
+	int blockAmt = role2.Block();
+	int damage2role2 = ceil(attackAmt - blockAmt);
 
+	damage2role2 = damage2role2 <= 0 ? 0 : damage2role2;
+	role2.health = role2.health - damage2role2;
+	cout << role1.name << " attacks " << role2.name << " and deals " << damage2role2 << "damage.\n";
+	cout << role1.name << " is down to " << role1.health << " health.\n ";
+	
+	if (role2.health <= 0) {
+		cout << role2.name << " has died and " << role1.name << " won!\n";
+		return "Game over!";
+	}
+	else {
+		return "continue...";
+	}
 }
