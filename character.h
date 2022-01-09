@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <iostream>
 
 using namespace std;
@@ -18,7 +19,7 @@ public:
 	virtual void m_SpellAttack(Character* enemy) = 0;
 
 	// Block the attack from the enemies, triggered by the player every round.
-	virtual void m_Block(Character* enemy) = 0;
+	virtual void m_Block(vector <Character*> element) = 0;
 
 public:
 	// Name of the character.
@@ -48,7 +49,7 @@ public:
 	void m_SpellAttack(Character* enemy);
 
 	// Block the attack from the enemies, triggered by the player every round.
-	void m_Block(Character* enemy);
+	void m_Block(vector <Character*> element);
 
 	// Escape from the game.
 	void Escape();
@@ -71,6 +72,6 @@ public:
 	void m_SpellAttack(Character* enemy);
 
 	// Block the attack from the enemies, triggered by the player every round.
-	void m_Block(Character* enemy);
+	void m_Block(vector <Character*> element);
 };
 

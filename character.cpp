@@ -5,6 +5,10 @@
 #define WEAKEN_REGULAR_ATTACK_MAX 3
 #define WEAKEN_REGULAR_ATTACK_MIN 1
 
+#define BASE_SPELL_ATTACK 10
+#define WEAKEN_SPELL_ATTACK_MAX 4
+#define WEAKEN_SPELL_ATTACK_MIN 2
+
 /* Hero implementations. */
 
 Hero::Hero(string name, int HP, int MP) {
@@ -31,11 +35,13 @@ void Hero::m_CritalAttack(Character* enemy) {
 
 // Spell attack, triggered by the player every round and deplete MP value.
 void Hero::m_SpellAttack(Character* enemy) {
-
+	srand((unsigned)time(NULL));
+	enemy->m_HP -= (BASE_SPELL_ATTACK - ((rand() % WEAKEN_SPELL_ATTACK_MAX) + WEAKEN_SPELL_ATTACK_MIN));
+	m_MP -= 10;
 }
 
 // Block the attack from the enemies, triggered by the player every round.
-void Hero::m_Block(Character* enemy) {
+void Hero::m_Block(vector <Character*> element) {
 
 }
 
@@ -60,7 +66,7 @@ Enemy::~Enemy() {
 
 void Enemy::m_RegulerAttack(Character* enemy) {
 	srand((unsigned)time(NULL));
-	enemy->m_HP -= (BASE_REGULAR_ATTACK - ((rand() % WEAKEN_REGULAR_ATTACK_MAX) + WEAKEN_REGULAR_ATTACK_MIN));
+	enemy->m_HP -= ((BASE_REGULAR_ATTACK - 2) - ((rand() % WEAKEN_REGULAR_ATTACK_MAX) + WEAKEN_REGULAR_ATTACK_MIN));
 }
 
 // The character has a chance to give crital attack at each round, not triggered by the player.
@@ -70,10 +76,12 @@ void Enemy::m_CritalAttack(Character* enemy) {
 
 // Spell attack, triggered by the player every round and deplete MP value.
 void Enemy::m_SpellAttack(Character* enemy) {
-
+	srand((unsigned)time(NULL));
+	enemy->m_HP -= ((BASE_SPELL_ATTACK - 3) - ((rand() % WEAKEN_SPELL_ATTACK_MAX) + WEAKEN_SPELL_ATTACK_MIN));
+	m_MP -= 6;
 }
 
 // Block the attack from the enemies, triggered by the player every round.
-void Enemy::m_Block(Character* enemy) {
+void Enemy::m_Block(vector <Character*> element) {
 
 }
