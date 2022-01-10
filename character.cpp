@@ -1,14 +1,6 @@
 #include "character.h"
 #include "stdlib.h"
 
-#define BASE_REGULAR_ATTACK 5
-#define WEAKEN_REGULAR_ATTACK_MAX 3
-#define WEAKEN_REGULAR_ATTACK_MIN 1
-
-#define BASE_SPELL_ATTACK 10
-#define WEAKEN_SPELL_ATTACK_MAX 4
-#define WEAKEN_SPELL_ATTACK_MIN 2
-
 /* Hero implementations. */
 
 Hero::Hero(string name, int HP, int MP) {
@@ -24,31 +16,46 @@ Hero::~Hero() {
 }
 
 void Hero::m_RegulerAttack(Character* enemy) {
-	srand((unsigned)time(NULL));
-	enemy->m_HP -= (BASE_REGULAR_ATTACK - ((rand() % WEAKEN_REGULAR_ATTACK_MAX) + WEAKEN_REGULAR_ATTACK_MIN));
-}
+	// Only perform attack when the HP of the enemy is larger than 0.
+	if (enemy->m_HP >0) {
+		srand((unsigned)time(NULL));
+		enemy->m_HP -= (BASE_REGULAR_ATTACK - ((rand() % WEAKEN_REGULAR_ATTACK_MAX) + WEAKEN_REGULAR_ATTACK_MIN));
+	}
+	else {
+		cout << "You are hitting the dead body! No effect!\n" << endl;
+	}
 
-// The character has a chance to give crital attack at each round, not triggered by the player.
-void Hero::m_CritalAttack(Character* enemy) {
-
+	// Avoid negative value.
+	if (enemy->m_HP < 0) {
+		enemy->m_HP = 0;
+	}
 }
 
 // Spell attack, triggered by the player every round and deplete MP value.
 void Hero::m_SpellAttack(Character* enemy) {
-	srand((unsigned)time(NULL));
-	enemy->m_HP -= (BASE_SPELL_ATTACK - ((rand() % WEAKEN_SPELL_ATTACK_MAX) + WEAKEN_SPELL_ATTACK_MIN));
-	m_MP -= 10;
+	// Only perform attack when the HP of the enemy is larger than 0.
+	if (enemy->m_HP > 0) {
+		srand((unsigned)time(NULL));
+		enemy->m_HP -= (BASE_SPELL_ATTACK - ((rand() % WEAKEN_SPELL_ATTACK_MAX) + WEAKEN_SPELL_ATTACK_MIN));
+		m_MP -= 10;
+	}
+	else {
+		cout << "You are hitting the dead body! No effect!\n" << endl;
+	}
+
+	// Avoid negative value.
+	if (enemy->m_HP < 0) {
+		enemy->m_HP = 0;
+	}
 }
 
 // Block the attack from the enemies, triggered by the player every round.
 void Hero::m_Block(vector <Character*> element) {
-
+	for (int i = 1; i < element.size(); i++) {
+		element[i]->m_IsBlockActivated = true;
+	}
 }
 
-// Escape from the game.
-void Hero::Escape() {
-
-}
 
 /* Enemy implementations. */
 
@@ -56,6 +63,7 @@ Enemy::Enemy(string name, int HP, int MP) {
 	m_name = name;
 	m_HP = HP;
 	m_MP = MP;
+	m_IsBlockActivated = false;
 	cout << "Enemy " << m_name << " joined the game! HP: " << m_HP <<
 		" MP: " << m_MP << " \n" << endl;
 }
@@ -65,23 +73,32 @@ Enemy::~Enemy() {
 }
 
 void Enemy::m_RegulerAttack(Character* enemy) {
+	// Attack value is not a fixed value.
 	srand((unsigned)time(NULL));
-	enemy->m_HP -= ((BASE_REGULAR_ATTACK - 2) - ((rand() % WEAKEN_REGULAR_ATTACK_MAX) + WEAKEN_REGULAR_ATTACK_MIN));
+	// Will block by the hero or not.
+	if (m_IsBlockActivated == false) {
+		enemy->m_HP -= ((BASE_REGULAR_ATTACK - 2) - ((rand() % WEAKEN_REGULAR_ATTACK_MAX) + WEAKEN_REGULAR_ATTACK_MIN));
+	}
+	else {
+		enemy->m_HP -= BLOCK_PERCNETAGE * ((BASE_REGULAR_ATTACK - 2) - ((rand() % WEAKEN_REGULAR_ATTACK_MAX) + WEAKEN_REGULAR_ATTACK_MIN));
+	}
+
 }
 
-// The character has a chance to give crital attack at each round, not triggered by the player.
-void Enemy::m_CritalAttack(Character* enemy) {
-
-}
-
-// Spell attack, triggered by the player every round and deplete MP value.
+// Spell attack, triggered by the system every round and deplete MP value.
 void Enemy::m_SpellAttack(Character* enemy) {
 	srand((unsigned)time(NULL));
-	enemy->m_HP -= ((BASE_SPELL_ATTACK - 3) - ((rand() % WEAKEN_SPELL_ATTACK_MAX) + WEAKEN_SPELL_ATTACK_MIN));
+	// Will block by the hero or not.
+	if (m_IsBlockActivated == false) {
+		enemy->m_HP -= ((BASE_SPELL_ATTACK - 2) - ((rand() % WEAKEN_SPELL_ATTACK_MAX) + WEAKEN_SPELL_ATTACK_MIN));
+	}
+	else {
+		enemy->m_HP -= BLOCK_PERCNETAGE * ((BASE_SPELL_ATTACK - 2) - ((rand() % WEAKEN_SPELL_ATTACK_MAX) + WEAKEN_SPELL_ATTACK_MIN));
+
+	}
 	m_MP -= 6;
 }
 
-// Block the attack from the enemies, triggered by the player every round.
 void Enemy::m_Block(vector <Character*> element) {
 
 }

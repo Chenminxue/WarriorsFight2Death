@@ -7,14 +7,17 @@ using namespace std;
 
 int main() {
 
+	// Create the battlefield object.
 	BattleGround bg;
 
+	// Main menu choice.
 	int hall_choice;
 
 	while (true)
 	{
 		bg.ShowMenu();
 
+		// Player has to give a choice whether to enter the game or exit the game.
 		cin >> hall_choice;
 		
 		switch (hall_choice) {
@@ -33,14 +36,13 @@ int main() {
 			cin >> create_hero_choice;
 			
 			system("cls");
+
+			// Create hero and enemies.
 			bg.CreateHero(create_hero_choice);
 			bg.CreateEnemy();
 			
+			// Start the game.
 			bg.StartFight();
-
-			while (true) {
-
-			}
 
 			system("pause");
 			break;
@@ -52,7 +54,7 @@ int main() {
 
 		// Wrong input choice.
 		default:
-			cout << "Wrong input, please enter 1 or 2..." << endl;
+			cout << "Wrong input, please enter 1 or 2...\n" << endl;
 			system("pause");
 			system("cls");
 		}
