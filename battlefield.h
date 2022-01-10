@@ -1,6 +1,6 @@
 #pragma once
 #include "character.h"
-
+#include <fstream>
 
 // Number of the enemies, current project will create 3 enemies instead of using this variable.
 #define NUM_ENEMY 3
@@ -16,6 +16,8 @@
 // Amount of MP that hero and enemy can recover.
 #define HERO_MP_RECOVERY 5
 #define ENEMY_MP_RECOVERY 3
+
+#define FILENAME "Record.txt"
 
 class BattleGround {
 public:
@@ -61,6 +63,9 @@ public:
 
 	// Recover character's MP each round.
 	void RecoverCharactersMP();
+
+	// Save records.
+	void Save();
 
 	// Deconstructor of the BattleGround.
 	~BattleGround();

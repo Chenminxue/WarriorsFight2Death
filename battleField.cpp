@@ -195,6 +195,7 @@ void BattleGround::CheckIsAlive() {
 	// The player will win the game when all enemies are dead.
 	if (m_enemy_1->m_HP <= 0 && m_enemy_2->m_HP <= 0 && m_enemy_3->m_HP <= 0) {
 		cout << m_hero->m_name << " won!\n" << endl;
+		Save();
 		system("pause");
 		exit(0);
 	}
@@ -213,4 +214,13 @@ BattleGround::~BattleGround() {
 	delete m_enemy_2;
 	delete m_enemy_3;
 	cout << "Game over! All characters are destoried...\n" << endl;
+}
+
+void BattleGround::Save() {
+	ofstream ofs;
+	ofs.open(FILENAME, ios::out);
+
+	ofs << m_round_counter << " rounds!" << endl;
+
+	ofs.close();
 }

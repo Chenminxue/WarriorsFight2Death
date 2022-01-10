@@ -44,9 +44,6 @@ int main() {
 			// Start the game.
 			bg.StartFight();
 
-			system("pause");
-			break;
-
 		// Exit the game.
 		case 2:
 			bg.Exit();
